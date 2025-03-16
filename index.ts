@@ -69,8 +69,7 @@ app.get("/api/balance", (req, res) => {
 });
 
 app.get("/api/playerdata", (req, res) => {
-  let idStripped = playerData.map((p) => {p.balance, p.coinFlipPlayed, p.name, p.plinkoPlayed, p.wheelOfFortunePlayed})
-  res.send(JSON.stringify(idStripped));
+  res.send(JSON.stringify(playerData));
 });
 
 app.get("/plinko/drop", (req, res) => {

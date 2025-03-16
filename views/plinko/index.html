@@ -38,6 +38,11 @@
                 <h1>Bet Amount: </h1>
                 <input id="amount" type="number">
             </div>
+            <div class="row">
+              <button class="percent" onclick="amount.value = localBalance">1x</button>
+              <button class="percent" onclick="amount.value = localBalance*0.5">0.5x</button>
+              <button class="percent" onclick="amount.value = localBalance*0.25">0.25x</button>
+            </div>
             <button id="spin" onclick="spin()">
                 Drop
                 <ion-icon name="arrow-down-outline" style="margin-bottom: -3px"></ion-icon>

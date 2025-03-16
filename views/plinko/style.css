@@ -69,6 +69,7 @@ header ion-icon:hover{
 
 .roll .row{
     display: flex;
+    justify-content: space-between;
 }
 
 .roll .row input{
@@ -85,6 +86,9 @@ header ion-icon:hover{
 
 #spin{
     background-color: rgb(127, 180, 47);
+    border: none;
+    border-right: solid 3px rgb(73, 110, 17);
+    border-bottom: solid 3px rgb(75, 116, 13);
     cursor: pointer;
     padding: 10px 20px;
     border-radius: 15px;
@@ -104,4 +108,22 @@ header ion-icon:hover{
 #plinko canvas{
     margin-top: 50px;
     margin-left: 70px;
+}
+
+.percent{
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 10px;
+    background-color: rgba(99, 206, 117, 0.774);
+    padding: 10px 20px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 700;
+    transition: translate 0.2s;
+}
+
+.percent:hover{
+    translate: 2px 2px;
 }
