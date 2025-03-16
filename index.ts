@@ -42,9 +42,12 @@ app.get("/", (req, res) => {
 
 app.post("/api/create", (req, res) => {
   const player = {
-    name: req.body.name,
+    name: req.body.name.toString(),
     balance: 1000,
     id: Math.floor(Math.random() * 999999),
+    plinkoPlayed: 0,
+    coinFlipPlayed: 0,
+    wheelOfFortunePlayed: 0,
   };
   playerData.push(player);
   savePlayerData();
