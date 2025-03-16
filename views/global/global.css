@@ -15,7 +15,6 @@ header{
     color: #fff;
     text-align: left;
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
     align-items: center;
     padding: 10px 20px;
@@ -24,4 +23,136 @@ header{
 a{
     text-decoration: none;
     color: #333;
+}
+
+
+body{
+    height: 100vh;
+    overflow: hidden;
+}
+
+header h1{
+    font-size: 2rem;
+}
+
+header ion-icon{
+    color: white;
+    font-size: 2rem;
+    margin-right: 10px;
+    margin-top: 3px;
+    transition: translate 0.3s;
+}
+
+header ion-icon:hover{
+    translate: -5px 0;
+}
+
+main.container{
+    display: flex;
+    width: 100vw;
+    height: 100%;
+}
+
+.left{
+    flex: 1;
+}
+
+.right{
+    width: 300px;
+    background: rgb(26, 56, 20);
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.right .balance{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-direction: row;
+    color: white;
+    text-align: center;
+}
+
+#balance{
+    font-size: 1.5rem;
+    color: white;
+    flex: 1;
+    text-align: left;
+}
+
+.right .balance img{
+    height: 30px;
+    margin-right: 10px;
+}
+
+.roll{
+    color: white;
+    font-size: 0.7rem;
+    margin-bottom: 50px;
+}
+
+.roll .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roll .row input{
+    min-width: 0px;
+    flex: 1;
+    background: rgba(0, 0, 0, 0.555);
+    color: white;
+    border: none;
+    margin: 0px 10px;
+    padding: 5px 5px;
+    font-size: 1.3rem;
+}
+
+
+#spin{
+    background-color: rgb(127, 180, 47);
+    border: none;
+    border-right: solid 3px rgb(73, 110, 17);
+    border-bottom: solid 3px rgb(75, 116, 13);
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white;
+    border: none;
+    width: 100%;
+    margin: 20px 0px;
+    transition: translate 0.3s;
+}
+
+#spin:hover{
+    translate: 0 5px ;
+}
+
+#plinko canvas{
+    margin-top: 50px;
+    margin-left: 70px;
+}
+
+.percent{
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 10px;
+    background-color: rgba(99, 206, 117, 0.774);
+    padding: 10px 20px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 700;
+    transition: translate 0.2s;
+}
+
+.percent:hover{
+    translate: 2px 2px;
 }

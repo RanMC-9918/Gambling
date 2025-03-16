@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wheel of Fortune</title>
+    <title>Coin Flip</title>
     <link rel="stylesheet" href="../global/global.css" />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -11,27 +11,29 @@
     <script defer src="../global/balance.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
-    <script defer src="wheeloffortune.js"></script>
+    <script defer src="plinko.js"></script>
+    
   </head>
   <body>
     <header>
       <a href="../">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </a>
-      <h1>Wheel of Fortune</h1>
+      <h1>Coin Flip</h1>
     </header>
     <main class="container">
-      <div class="left" id="left">
+      <div class="left">
         <div id="plinko">
+        
         </div>
       </div>
       <div class="right">
         <div class="balance">
           <img src="../assets/stonks-low.png">
-          <h2>Balance</h2>
+          <h2>Balance:</h2>
         </div>
-        <p id="balance"></p>
-        <div class="roll">
+          <p id="balance"></p>
+         <div class="roll">
             <div class="row">
                 <h1>Bet Amount: </h1>
                 <input id="amount" type="number">
@@ -42,10 +44,11 @@
               <button class="percent" onclick="amount.value = localBalance*0.25">0.25x</button>
             </div>
             <button id="spin" onclick="spin()">
-                Spin
-                <ion-icon name="dice-outline" style="margin-bottom: -3px"></ion-icon>
+                Drop
+                <ion-icon name="arrow-down-outline" style="margin-bottom: -3px"></ion-icon>
             </button>
         </div>
+      </div>
       </div>
     </main>
   </body>

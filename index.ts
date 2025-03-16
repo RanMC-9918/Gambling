@@ -3,6 +3,8 @@ const { fileURLToPath } = require("url");
 const express = require("express");
 const fs = require("fs");
 
+let file = fs.readFileSync(path.join(__dirname, "data/playerdata.json"));
+
 const bodyParser = require("body-parser");
 
 const viewDir = path.join(__dirname, "views");
@@ -16,18 +18,12 @@ interface player {
   wheelOfFortunePlayed: number;
 }
 
-let playerData: player[];
+let playerData: player[] = [];
 
-const jsonPlayerData = fs.readFileSync(
-  path.join(__dirname, "data/playerdata.json"),
-  "utf-8"
-);
-
-if (jsonPlayerData.length === 0) {
-  playerData = [];
-} else {
-  playerData = JSON.parse(jsonPlayerData);
+if (file.length > 0) {
+  playerData = JSON.parse(file.toString());
 }
+
 
 // Now you can use __dirname as usual
 const app = express();
@@ -70,6 +66,7 @@ app.get("/api/balance", (req, res) => {
 
 app.get("/api/playerdata", (req, res) => {
   res.send(JSON.stringify(playerData));
+  console.log(JSON.stringify(playerData));
 });
 
 app.get("/plinko/drop", (req, res) => {

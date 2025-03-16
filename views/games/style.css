@@ -6,12 +6,13 @@
 }
 
 .container a{
-    background: linear-gradient(to top, rgb(0, 0, 0), rgb(91, 189, 125));
+    background: linear-gradient(to top, rgb(0, 0, 0), rgb(21, 70, 9));
     border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.507);
     font-size: 1.5rem;
     flex: 1;
     min-width: 400px;
+    overflow: hidden;
 }
 
 .card{
@@ -106,4 +107,12 @@ tr{
 
 td{
     padding: 10px 20px;
+}
+
+body{
+    background-color: #1d3612;
+}
+
+header {
+    justify-content: space-between;
 }
