@@ -89,3 +89,22 @@ async function balanceOnly(){
 
     return newBalance;
 }
+
+fetch("/api/playerdata", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  }
+})
+.then((res) => res.json())
+  .then((data) => {
+    let has = false;
+    data.forEach((player) => {
+      if (player.id === userid) {
+        has = true;
+      }
+    });
+    if(!has){
+      reset();
+    }
+  })
