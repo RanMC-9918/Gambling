@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coin Flip</title>
+    <title>Cross The Bridge</title>
     <link rel="stylesheet" href="../global/global.css" />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -11,7 +11,7 @@
     <script defer src="../global/balance.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
-    <script defer src="plinko.js"></script>
+    <script defer src="bridge.js"></script>
     
   </head>
   <body>
@@ -19,7 +19,7 @@
       <a href="../">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </a>
-      <h1>Coin Flip</h1>
+      <h1>Cross The Bridge</h1>
     </header>
     <main class="container">
       <div class="left">
@@ -44,8 +44,8 @@
               <button class="percent" onclick="amount.value = localBalance*0.25">0.25x</button>
             </div>
             <button id="spin" onclick="spin()">
-                Drop
-                <ion-icon name="arrow-down-outline" style="margin-bottom: -3px"></ion-icon>
+                Start
+                <ion-icon name="play-outline" style="margin-bottom: -3px"></ion-icon>
             </button>
         </div>
       </div>

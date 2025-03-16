@@ -24,7 +24,6 @@ if (file.length > 0) {
   playerData = JSON.parse(file.toString());
 }
 
-
 // Now you can use __dirname as usual
 const app = express();
 
@@ -82,7 +81,7 @@ app.get("/plinko/drop", (req, res) => {
 
   player.plinkoPlayed++;
 
-  if(amount > player.balance || amount < 0) {
+  if (amount > player.balance || amount < 0) {
     res.sendStatus(400);
     return;
   }
@@ -222,6 +221,74 @@ app.get("/wheeloffortune/roll", (req, res) => {
   savePlayerData();
 
   res.send(JSON.stringify({ seed: seed }));
+});
+
+let bridgeGames = [
+  {
+    id: 0,
+    amount: 10,
+    level: 0,
+  },
+];
+
+app.get("/bridge/start", (req, res) => {
+  const id = req.query.id;
+  const amount = req.query.amount;
+
+  let player = playerData.find((p) => p.id == id);
+
+  if (!player) {
+    res.sendStatus(404);
+    return;
+  }
+  if (amount > player.balance || amount < 0) {
+    res.sendStatus(400);
+    return;
+  }
+
+  bridgeGames.push({
+    id,
+    amount,
+    level: 0,
+  });
+});
+
+app.get("/bridge/cross", (req, res) => {
+  const id = req.query.id;
+
+  let bridge = bridgeGames.find((p) => p.id == id);
+
+  if (!bridge) {
+    res.sendStatus(404);
+    return;
+  }
+
+  if (Math.random() < (99 - bridge.level * 9) / 100) {
+    bridge.level++;
+
+    res.send(JSON.stringify({ seed: true }));
+  } else {
+    res.send(JSON.stringify({ seed: false }));
+  }
+});
+
+app.get("/bridge/end", (req, res) => {
+  const id = req.query.id;
+
+  let bridge = bridgeGames.find((p) => p.id == id);
+
+  if (!bridge) {
+    res.sendStatus(404);
+    return;
+  }
+
+  let award = Math.floor(((bridge.level + 1) / 2) * 10) / 10;
+
+  playerData.forEach((player) => {
+    if (player.id == id) {
+      player.balance += bridge.amount * award;
+    }
+  });
 });
 
 function generateWheelSeed() {
