@@ -11,6 +11,9 @@ interface player {
   name: string;
   balance: number;
   id: number;
+  plinkoPlayed: number;
+  coinFlipPlayed: number;
+  wheelOfFortunePlayed: number;
 }
 
 let playerData: player[];
@@ -63,7 +66,8 @@ app.get("/api/balance", (req, res) => {
 });
 
 app.get("/api/playerdata", (req, res) => {
-  res.send(playerData);
+  let idStripped = playerData.map((p) => {p.balance, p.coinFlipPlayed, p.name, p.plinkoPlayed, p.wheelOfFortunePlayed})
+  res.send(JSON.stringify(idStripped));
 });
 
 app.get("/plinko/drop", (req, res) => {
@@ -74,6 +78,13 @@ app.get("/plinko/drop", (req, res) => {
 
   if (!player) {
     res.sendStatus(404);
+    return;
+  }
+
+  player.plinkoPlayed++;
+
+  if(amount > player.balance || amount < 0) {
+    res.sendStatus(400);
     return;
   }
 
@@ -141,6 +152,8 @@ app.get("/wheeloffortune/roll", (req, res) => {
     res.end(JSON.stringify("You are a nobody"));
     return;
   }
+
+  player.wheelOfFortunePlayed++;
 
   if (amount > player.balance || player.balance < 0) {
     res.end(JSON.stringify({ seed: -1 }));
@@ -217,6 +230,7 @@ function generateWheelSeed() {
 }
 
 function savePlayerData() {
+  playerData.sort((a, b) => a.balance - b.balance);
   fs.writeFileSync(
     path.join(__dirname, "data/playerdata.json"),
     JSON.stringify(playerData)

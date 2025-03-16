@@ -138,6 +138,11 @@ function spin() {
 
   // trackPath(balls[0], [true, false, false, true, true, true, false, true]);
 
+  if(amount.value > localBalance) {
+    alert("Not enough balance");
+    return;
+  }
+
   fetch(`/plinko/drop?id=${userid}&amount=${amount.value}`, {
     method: "GET",
     headers: {
