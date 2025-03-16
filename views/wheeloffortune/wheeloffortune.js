@@ -26,7 +26,7 @@ function setup() {
 
 function draw() {
   if(idle){
-    rot -= 0.5;
+    rot -= 0.3;
   }
   clear();
   renderWheel(rot);
@@ -44,6 +44,7 @@ function renderWheel(rot) {
 
 async function spin() {
   if(!idle) return
+  balance.innerText = "$" + (localBalance - amountInput.value); // balance.js
   requestSpin(amountInput.value)
 }
 
@@ -66,6 +67,7 @@ function partTwo() {
       console.log("STOP");
       vel = 0;
       spinFinished(Math.ceil((rot % 360) / 45));
+      console.log(rot % 360)
       clearInterval(slowDown);
     }
   }, 30);
@@ -117,6 +119,9 @@ function requestSpin(worth) {
   .then((res) => res.json())
   .then((data) => {
     console.log(data);
+    if(data.seed == -1)[
+      alert('Not enough balance')
+    ]
     partOne(data.seed);
   });
 }

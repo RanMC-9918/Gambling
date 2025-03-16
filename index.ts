@@ -55,6 +55,7 @@ app.get("/api/balance", (req, res) => {
   });
 
   if (player) {
+    player.balance = Math.floor(player.balance * 100) / 100;
     res.send(JSON.stringify({ balance: player.balance }));
   } else {
     res.sendStatus(404);
@@ -65,6 +66,70 @@ app.get("/api/playerdata", (req, res) => {
   res.send(playerData);
 });
 
+app.get("/plinko/drop", (req, res) => {
+  const userid = req.query.id;
+  let amount = req.query.amount;
+
+  let player = playerData.find((p) => p.id == userid);
+
+  if (!player) {
+    res.sendStatus(404);
+    return;
+  }
+
+  let ans: boolean[] = [];
+  let dist = 0;
+  for (let i = 0; i < 8; i++) {
+    if (Math.random() > 0.5) {
+      ans.push(true);
+      dist += 1;
+    } else {
+      ans.push(false);
+      dist -= 1;
+    }
+  }
+
+  dist = Math.abs(dist) / 2;
+
+  let multiplier = 1;
+  switch (dist) {
+    case 0:
+      multiplier = 0.5;
+      break;
+    case 1:
+      multiplier = 0.75;
+      break;
+    case 2:
+      multiplier = 2;
+      break;
+    case 3:
+      multiplier = 10;
+      break;
+    case 4:
+      multiplier = 20;
+      break;
+    default:
+      multiplier = 1;
+      console.warn("plinko is out of bounds");
+      break;
+  }
+
+  player.balance -= amount;
+  amount *= multiplier;
+  player.balance += amount;
+  player.balance = Math.floor(player.balance * 100) / 100;
+  savePlayerData();
+
+  //console.log(ans);
+  //console.log(multiplier);
+
+  res.send(
+    JSON.stringify({
+      seed: ans,
+    })
+  );
+});
+
 app.get("/wheeloffortune/roll", (req, res) => {
   let id = req.query.id;
   let amount = req.query.amount;
@@ -72,10 +137,13 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   let player = playerData.find((p) => p.id == id);
 
-  console.log(id + "  " + amount);
-
   if (!player) {
     res.end(JSON.stringify("You are a nobody"));
+    return;
+  }
+
+  if (amount > player.balance || player.balance < 0) {
+    res.end(JSON.stringify({ seed: -1 }));
     return;
   }
 
@@ -92,10 +160,10 @@ app.get("/wheeloffortune/roll", (req, res) => {
   }
 
   rot = rot % 360;
+  //console.log(rot);
   rot /= 45;
 
   const option = Math.ceil(rot);
-
 
   let multiplier = 0;
 
@@ -126,7 +194,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
       break;
     default:
       multiplier = 1;
-      console.warn("Unsupported rotation option");
+      console.warn("Unsupported rotation option: " + rot);
       break;
   }
 
@@ -135,7 +203,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   player.balance += amount;
 
-  player.balance = Math.floor(player.balance);
+  player.balance = Math.floor(player.balance * 100) / 100;
 
   console.log(multiplier);
 

@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script defer src="balance.js"></script>
+    <script defer src="../global/balance.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+    <script defer src="plinko.js"></script>
     
   </head>
   <body>
@@ -20,15 +23,25 @@
     </header>
     <main class="container">
       <div class="left">
-        <div class="plinko">
+        <div id="plinko">
         
         </div>
       </div>
       <div class="right">
         <div class="balance">
           <img src="../assets/stonks-low.png">
-          <h2>Balance</h2>
+          <h2>Balance:</h2>
           <p id="balance"></p>
+        </div>
+         <div class="roll">
+            <div class="row">
+                <h1>Bet Amount: </h1>
+                <input id="amount" type="number">
+            </div>
+            <button id="spin" onclick="spin()">
+                Drop
+                <ion-icon name="arrow-down-outline" style="margin-bottom: -3px"></ion-icon>
+            </button>
         </div>
       </div>
       </div>

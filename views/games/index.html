@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gambling</title>
+    <title>For-profit Gambling</title>
     <link rel="stylesheet" href="./global/global.css" />
     <link rel="stylesheet" href="./games/style.css" />
     <script
@@ -14,19 +14,26 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <script defer src="../global/balance.js"></script>
   </head>
   <body>
     <header>
-      <h1>Gambling</h1>
+      <h1>Competitive Gambling</h1>
+      <div class="balance">
+        <h1>Balance:</h1>
+        <p id="balance">$0</p>
+        <button onclick="reset()">Reset</button>
+      </div>
     </header>
 
     <div class="container">
       <a href="./plinko">
-        <div class="card">
+      <div class="card">
         <div class="title">
           <h2>Plinko</h2>
           <img src="../assets/new.png" alt="" />
         </div>
+        <img src="../assets/plinko.png" class="game-bg" alt="" />
       </div>
       </a>
       <a href="./coinflip">

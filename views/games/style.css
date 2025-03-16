@@ -6,19 +6,20 @@
 }
 
 .container a{
-    background: linear-gradient(to top, rgb(0, 0, 0), rgb(37, 37, 37));
+    background: linear-gradient(to top, rgb(0, 0, 0), rgb(91, 189, 125));
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    flex: 1;
     font-size: 1.5rem;
+    flex: 1;
+    min-width: 400px;
 }
 
 .card{
     padding: 0;
     overflow: hidden;
     height: 300px;
-    flex: 1;
     position: relative; 
+    flex: 1;
 }
 
 .card .title{
@@ -40,13 +41,13 @@
 .title{
     color: white;
     padding: 15px 20px;
-    text-shadow: 5px 5px 30px black;
+    text-shadow: 10px 10px 20px black;
 }
 
 .title img{
     height: 1.7rem;
     border-radius: 10px;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.199);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.199);
 }
 
 .container a{
@@ -55,4 +56,30 @@
 
 .container a:hover{
     translate: 0 -10px;
+}
+
+.balance {
+    display: flex;
+    font-size: 1rem;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.balance p{
+    font-size: 1.5rem;
+}
+
+.balance button{
+    padding: 8px 12px;
+    border-radius: 10px;
+    background-color: #9c1818;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.balance button:hover{
+    scale: 1.07;
 }

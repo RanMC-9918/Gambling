@@ -35,6 +35,9 @@ header ion-icon:hover{
     background: rgb(43, 38, 38);
     height: 100%;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .right .balance{
@@ -56,4 +59,49 @@ header ion-icon:hover{
 .right .balance img{
     height: 30px;
     margin-right: 10px;
+}
+
+.roll{
+    color: white;
+    font-size: 0.7rem;
+    margin-bottom: 50px;
+}
+
+.roll .row{
+    display: flex;
+}
+
+.roll .row input{
+    min-width: 0px;
+    flex: 1;
+    background: rgb(54, 52, 52);
+    color: white;
+    border: none;
+    margin: 0px 10px;
+    padding: 0px 10px;
+    font-size: 1.3rem;
+}
+
+
+#spin{
+    background-color: rgb(127, 180, 47);
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white;
+    border: none;
+    width: 100%;
+    margin: 20px 0px;
+    transition: translate 0.3s;
+}
+
+#spin:hover{
+    translate: 0 5px ;
+}
+
+#plinko canvas{
+    margin-top: 50px;
+    margin-left: 70px;
 }
