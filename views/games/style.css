@@ -1,0 +1,58 @@
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.container a{
+    background: linear-gradient(to top, rgb(0, 0, 0), rgb(37, 37, 37));
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    font-size: 1.5rem;
+}
+
+.card{
+    padding: 0;
+    overflow: hidden;
+    height: 300px;
+    flex: 1;
+    position: relative; 
+}
+
+.card .title{
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+    z-index: 3;
+}
+
+.card .game-bg{
+    width: 100%;
+    z-index: 0;
+    opacity: 0.5;
+}
+
+.title{
+    color: white;
+    padding: 15px 20px;
+    text-shadow: 5px 5px 30px black;
+}
+
+.title img{
+    height: 1.7rem;
+    border-radius: 10px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.199);
+}
+
+.container a{
+    transition: translate 0.3s;
+}
+
+.container a:hover{
+    translate: 0 -10px;
+}

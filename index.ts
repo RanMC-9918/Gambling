@@ -1,0 +1,160 @@
+const path = require("path");
+const { fileURLToPath } = require("url");
+const express = require("express");
+const fs = require("fs");
+
+const bodyParser = require("body-parser");
+
+const viewDir = path.join(__dirname, "views");
+
+interface player {
+  name: string;
+  balance: number;
+  id: number;
+}
+
+let playerData: player[];
+
+const jsonPlayerData = fs.readFileSync(
+  path.join(__dirname, "data/playerdata.json"),
+  "utf-8"
+);
+
+if (jsonPlayerData.length === 0) {
+  playerData = [];
+} else {
+  playerData = JSON.parse(jsonPlayerData);
+}
+
+// Now you can use __dirname as usual
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, "views")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(viewDir, "games/index.html"));
+});
+
+app.post("/api/create", (req, res) => {
+  const player = {
+    name: req.body.name,
+    balance: 1000,
+    id: Math.floor(Math.random() * 999999),
+  };
+  playerData.push(player);
+  savePlayerData();
+  res.send(JSON.stringify({ id: player.id }));
+});
+
+app.get("/api/balance", (req, res) => {
+  let id = req.query.id;
+  let player = playerData.find((p) => {
+    return p.id == id;
+  });
+
+  if (player) {
+    res.send(JSON.stringify({ balance: player.balance }));
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.get("/api/playerdata", (req, res) => {
+  res.send(playerData);
+});
+
+app.get("/wheeloffortune/roll", (req, res) => {
+  let id = req.query.id;
+  let amount = req.query.amount;
+  let rot = req.query.rot % 360;
+
+  let player = playerData.find((p) => p.id == id);
+
+  console.log(id + "  " + amount);
+
+  if (!player) {
+    res.end(JSON.stringify("You are a nobody"));
+    return;
+  }
+
+  const seed = generateWheelSeed();
+  let vel = 0;
+  while (vel <= seed) {
+    vel += 0.5;
+    rot += vel;
+  }
+
+  while (vel >= 0) {
+    vel -= vel / 50 + 0.1;
+    rot += vel;
+  }
+
+  rot = rot % 360;
+  rot /= 45;
+
+  const option = Math.ceil(rot);
+
+
+  let multiplier = 0;
+
+  switch (option) {
+    case 0:
+      multiplier = 2;
+      break;
+    case 1:
+      multiplier = 0.7;
+      break;
+    case 2:
+      multiplier = 1;
+      break;
+    case 3:
+      multiplier = 0.7;
+      break;
+    case 4:
+      multiplier = 2;
+      break;
+    case 5:
+      multiplier = 0.7;
+      break;
+    case 6:
+      multiplier = 1;
+      break;
+    case 7:
+      multiplier = 0.7;
+      break;
+    default:
+      multiplier = 1;
+      console.warn("Unsupported rotation option");
+      break;
+  }
+
+  player.balance -= amount;
+  amount *= multiplier;
+
+  player.balance += amount;
+
+  player.balance = Math.floor(player.balance);
+
+  console.log(multiplier);
+
+  savePlayerData();
+
+  res.send(JSON.stringify({ seed: seed }));
+});
+
+function generateWheelSeed() {
+  return Math.floor(Math.random() * 10 + 15);
+}
+
+function savePlayerData() {
+  fs.writeFileSync(
+    path.join(__dirname, "data/playerdata.json"),
+    JSON.stringify(playerData)
+  );
+}
+
+app.listen(3000, () => {
+  console.log("Server is running on http://localhost:3000");
+});
