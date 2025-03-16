@@ -251,6 +251,8 @@ app.get("/bridge/start", (req, res) => {
     amount,
     level: 0,
   });
+
+  console.log(bridgeGames)
 });
 
 app.get("/bridge/cross", (req, res) => {
@@ -265,7 +267,7 @@ app.get("/bridge/cross", (req, res) => {
 
   if (Math.random() < (99 - bridge.level * 9) / 100) {
     bridge.level++;
-
+    console.log(bridge);
     res.send(JSON.stringify({ seed: true }));
   } else {
     res.send(JSON.stringify({ seed: false }));

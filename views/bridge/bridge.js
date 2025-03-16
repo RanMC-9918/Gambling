@@ -100,6 +100,7 @@ function spin(){
     });
   }
   else {
+    idle = true;
     startSession(amount.value);
   }
 }

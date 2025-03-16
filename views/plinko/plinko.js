@@ -169,7 +169,7 @@ function spin() {
 }
 
 setInterval(() => {
-  if(balls.length == 0) {
+  if(balls.length < 4) {
     getBalance();
   }
-}, 10000);
+}, 5000);
