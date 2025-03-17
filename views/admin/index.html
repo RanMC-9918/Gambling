@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+</head>
+<body>
+  <label for="pass">
+    Password
+  </label>
+  <input type="text" id="pass">
+  <label for="new">
+    Custom DB
+  </label>
+  <input type="text" id="new">
+  <button id="submit">
+    Submit
+  </button>
+<script>
+  const sum = document.getElementById("submit");
+  const pass = document.getElementById("pass");
+  const newB = document.getElementById("new");
+  
+  addEventListener("click", () => {
+    fetch("/api/customdb/?password=" + pass.value, {
+      method: "POST",
+      headers: [],
+      body: {
+        newdb: //finish
+      };
+    });
+  });
+</script>
+</body>
+</html>
