@@ -98,6 +98,13 @@ app.get("/api/balance", (req, res) => {
 });
 
 app.get("/api/playerdata", (req, res) => {
+  let stripped = playerData.map(player => {
+    name: player.name,
+    balance: player.balance,
+    plinkoPlayed: player.plinkoPlayed,
+    coinFlipPlayed: player.coinFlipPlayed,
+    wheelOfFortunePlayed: player.wheelOfFortunePlayed
+  });
   res.send(JSON.stringify(playerData));
 });
 
@@ -177,6 +184,26 @@ app.get("/plinko/drop", (req, res) => {
   );
 });
 
+app.post("/api/customdb", (req, res) => {
+  const pass = req.query.pass;
+  if(pass == process.env.PASSWORD){
+    if(req.body.length > 1){
+      playerData = req.body.length;
+    }
+    else{
+      res.send("bad data");
+  }
+)
+
+app.get("/api/db", (req, res) => {
+  const pass = req.query.password;
+  if(pass == process.env.PASSWORD){
+    res.send(JSON.stringify(playerData));
+  }
+  else{
+    res.send("Wrong password");
+});
+
 app.get("/wheeloffortune/roll", (req, res) => {
   let id = req.query.id;
   let amount = req.query.amount;
@@ -216,7 +243,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   let multiplier = 0;
 
-  switch (option) {
+  switch (option % 7) {
     case 0:
       multiplier = 2;
       break;
