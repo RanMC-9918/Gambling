@@ -9,18 +9,14 @@ fetch('/api/playerdata', function (req, res) {
     return res.json();
 }).then(res => {
     res.sort((a, b) => b.balance - a.balance);
+    let exists = false;
     res.forEach((player, index) => {
         const row = document.createElement('tr');
 
-        let exists = false;
 
         if(player.name == username){
             exists = true;
             row.classList.add("self-row");
-        }
-
-        if(!exists){
-            reset();
         }
 
         row.innerHTML = `
@@ -33,4 +29,7 @@ fetch('/api/playerdata', function (req, res) {
         `;
         leaderboard.appendChild(row);
     });
+    if (!exists) {
+       reset();
+    }
 });
