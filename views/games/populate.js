@@ -12,8 +12,15 @@ fetch('/api/playerdata', function (req, res) {
     res.forEach((player, index) => {
         const row = document.createElement('tr');
 
+        let exists = false;
+
         if(player.name == username){
+            exists = true;
             row.classList.add("self-row");
+        }
+
+        if(!exists){
+            reset();
         }
 
         row.innerHTML = `
