@@ -11,8 +11,13 @@ fetch('/api/playerdata', function (req, res) {
     res.sort((a, b) => b.balance - a.balance);
     res.forEach((player, index) => {
         const row = document.createElement('tr');
+
+        if(player.name == username){
+            row.classList.add("self-row");
+        }
+
         row.innerHTML = `
-        <td>${index}</td>
+        <td>${index+1}</td>
         <td>${player.name}</td>
         <td>${player.plinkoPlayed}</td>
         <td>${player.coinFlipPlayed}</td>

@@ -116,3 +116,10 @@ body{
 header {
     justify-content: space-between;
 }
+
+
+.self-row{
+    background-color: rgba(255, 0, 0, 0.164);
+}
+
+

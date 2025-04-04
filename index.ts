@@ -2,8 +2,16 @@ const path = require("path");
 const { fileURLToPath } = require("url");
 const express = require("express");
 const fs = require("fs");
+const env = require("dotenv").config();
 
-let file = fs.readFileSync(path.join(__dirname, "data/playerdata.json"));
+const { Client } = require("pg");
+
+let DB = new Client({
+  connectionString: process.env.DBURL,
+  ssl: true,
+})
+
+DB.connect();
 
 const bodyParser = require("body-parser");
 
@@ -18,13 +26,28 @@ interface player {
   wheelOfFortunePlayed: number;
 }
 
-let playerData: player[] = [];
+let playerData: player[] = []; 
 
-if (file.length > 0) {
-  playerData = JSON.parse(file.toString());
+async function loadFromDB(){
+  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 50");
+  console.log("Loading data...")
+  res.rows.map(
+    (row, index) => {
+      console.log("Index " + index + ": " + JSON.stringify(row));
+      playerData.push({
+        name: row.username,
+        balance: row.balance,
+        id: row.id,
+        plinkoPlayed: row.plinkoplayed,
+        coinFlipPlayed: row.coinflipplayed,
+        wheelOfFortunePlayed: row.wheeloffortuneplayed,
+      });
+    }
+  )
 }
 
-// Now you can use __dirname as usual
+loadFromDB();
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -35,18 +58,29 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(viewDir, "games/index.html"));
 });
 
-app.post("/api/create", (req, res) => {
+app.post("/api/create", async (req, res) => {
+  const name = req.body.name.toString();
+
+  
+  const id = Math.floor(Math.random()*99999999)
+  
+  DB.query("INSERT INTO playerData (username, id) VALUES ($1, $2);", [
+    name, id
+  ]);
+
   const player = {
-    name: req.body.name.toString(),
+    name,
     balance: 1000,
-    id: Math.floor(Math.random() * 999999),
+    id,
     plinkoPlayed: 0,
     coinFlipPlayed: 0,
     wheelOfFortunePlayed: 0,
   };
+
   playerData.push(player);
-  savePlayerData();
-  res.send(JSON.stringify({ id: player.id }));
+
+
+  res.send(JSON.stringify({ id: player.id, username: player.name }));
 });
 
 app.get("/api/balance", (req, res) => {
@@ -65,7 +99,6 @@ app.get("/api/balance", (req, res) => {
 
 app.get("/api/playerdata", (req, res) => {
   res.send(JSON.stringify(playerData));
-  console.log(JSON.stringify(playerData));
 });
 
 app.get("/plinko/drop", (req, res) => {
@@ -127,7 +160,12 @@ app.get("/plinko/drop", (req, res) => {
   amount *= multiplier;
   player.balance += amount;
   player.balance = Math.floor(player.balance * 100) / 100;
-  savePlayerData();
+  
+  DB.query(
+    "UPDATE playerData SET balance = $1, plinkoPlayed = $2 WHERE id = $3",
+    [player.balance, player.plinkoPlayed, player.id]
+  );
+
 
   //console.log(ans);
   //console.log(multiplier);
@@ -203,6 +241,9 @@ app.get("/wheeloffortune/roll", (req, res) => {
     case 7:
       multiplier = 0.7;
       break;
+    case 8:
+      multiplier = 2;
+      break;
     default:
       multiplier = 1;
       console.warn("Unsupported rotation option: " + rot);
@@ -218,7 +259,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   console.log(multiplier);
 
-  savePlayerData();
+  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3", [player.balance, player.wheelOfFortunePlayed, player.id]);
 
   res.send(JSON.stringify({ seed: seed }));
 });
@@ -297,13 +338,6 @@ function generateWheelSeed() {
   return Math.floor(Math.random() * 10 + 15);
 }
 
-function savePlayerData() {
-  playerData.sort((a, b) => a.balance - b.balance);
-  fs.writeFileSync(
-    path.join(__dirname, "data/playerdata.json"),
-    JSON.stringify(playerData)
-  );
-}
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");

@@ -112,7 +112,7 @@ async function trackPath(ball, path) {
   }
   netBalanceBuffer = (await balanceOnly()) - localBalance;
   console.log(netBalanceBuffer);
-  if (balls.length > 4) {
+  if (balls.length > 10) {
     localBalance += netBalanceBuffer / balls.length;
     localBalance = Math.floor(localBalance * 100) / 100;
     balance.innerText = "$" + localBalance;
@@ -139,7 +139,6 @@ function spin() {
   // trackPath(balls[0], [true, false, false, true, true, true, false, true]);
 
   if(amount.value > localBalance || localBalance < 0) {
-    alert("Not enough balance");
     return;
   }
 

@@ -26,7 +26,6 @@ function setup() {
 
 function draw() {
   if(idle){
-    rot -= 0.3;
   }
   clear();
   renderWheel(rot);

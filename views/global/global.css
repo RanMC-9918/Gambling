@@ -26,11 +26,6 @@ a{
 }
 
 
-body{
-    height: 100vh;
-    overflow: hidden;
-}
-
 header h1{
     font-size: 2rem;
 }
@@ -49,7 +44,7 @@ header ion-icon:hover{
 
 main.container{
     display: flex;
-    width: 100vw;
+    width: 100svw;
     height: 100%;
 }
 
@@ -155,4 +150,11 @@ main.container{
 
 .percent:hover{
     translate: 2px 2px;
+}
+
+a{
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    padding: 0px 10px;
 }
