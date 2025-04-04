@@ -98,13 +98,13 @@ app.get("/api/balance", (req, res) => {
 });
 
 app.get("/api/playerdata", (req, res) => {
-  let stripped = playerData.map(player => {
+  let stripped = playerData.map(player => { return {
     name: player.name,
     balance: player.balance,
     plinkoPlayed: player.plinkoPlayed,
     coinFlipPlayed: player.coinFlipPlayed,
     wheelOfFortunePlayed: player.wheelOfFortunePlayed
-  });
+}});
   res.send(JSON.stringify(playerData));
 });
 
@@ -192,6 +192,8 @@ app.post("/api/customdb", (req, res) => {
     }
     else{
       res.send("bad data");
+    }
+  }
   }
 )
 
@@ -202,6 +204,7 @@ app.get("/api/db", (req, res) => {
   }
   else{
     res.send("Wrong password");
+  }
 });
 
 app.get("/wheeloffortune/roll", (req, res) => {
