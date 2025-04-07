@@ -187,7 +187,7 @@ app.get("/plinko/drop", (req, res) => {
 app.post("/api/customdb", async (req, res) => {
   const password = req.query.password;
   if(password == process.env.PASSWORD){
-    if(req.body.length > 1){
+    if(req.body.newdb.length > 1){
       await DB.query("SELECT * FROM playerData;").then((old) => old.text()).then((old) => {
         res.send(old);
       })
