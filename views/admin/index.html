@@ -15,7 +15,8 @@
   <label for="new">
     Custom DB
   </label>
-  <input type="text" placeholder="Leave empty for read" id="new"><br>
+  <input type="text" rows="5" placeholder="Leave empty for read" id="new">
+  <br>
   <br>
   <input type="checkbox" id="confirmR">
   <label for="confirmR">Confirm READ access</label>
@@ -45,8 +46,8 @@
         body: {
           newdb: newB.value //finish
         },
-      }).then((res) => res).then(() => {
-        window.redirect("/");
+      }).then((res) => res.text()).then((text) => {
+        document.body.innerHTML = text;
       })
     }
     else if(confirmR.checked && !confirmW.checked){
@@ -54,8 +55,8 @@
       fetch("/api/db/?password=" + pass.value, {
         method: "GET",
         headers: []
-      }).then((res) => res.text()).then((res) => {
-        document.body.innerHTML = res;
+      }).then((res) => res.text()).then((text) => {
+        document.body.innerHTML = text;
       })
     }
     else{
