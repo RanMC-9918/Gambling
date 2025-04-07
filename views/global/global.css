@@ -44,12 +44,13 @@ header ion-icon:hover{
 
 main.container{
     display: flex;
-    width: 100svw;
-    height: 100%;
+    width: 100%;
+    height: 100svh;
 }
 
 .left{
     flex: 1;
+    min-width: 0px;
 }
 
 .right{

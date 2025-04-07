@@ -8,7 +8,7 @@ fetch('/api/playerdata', function (req, res) {
 }).then(res => {
     return res.json();
 }).then(res => {
-    res.sort((a, b) => b.balance - a.balance);
+    res.sort((a, b) => (Number)(b.balance) - (Number)(a.balance));
     let exists = false;
     res.forEach((player, index) => {
         const row = document.createElement('tr');
@@ -19,13 +19,15 @@ fetch('/api/playerdata', function (req, res) {
             row.classList.add("self-row");
         }
 
+        console.log((Number)(player.balance));
+
         row.innerHTML = `
-        <td>${index+1}</td>
+        <td>${index + 1}</td>
         <td>${player.name}</td>
-        <td>${player.plinkoPlayed}</td>
-        <td>${player.coinFlipPlayed}</td>
-        <td>${player.wheelOfFortunePlayed}</td>
-        <td>${player.balance}</td>
+        <td>${player.plinkoPlayed.toLocaleString("en-US")}</td>
+        <td>${player.coinFlipPlayed.toLocaleString("en-US")}</td>
+        <td>${player.wheelOfFortunePlayed.toLocaleString("en-US")}</td>
+        <td>${(Number)(player.balance).toLocaleString("en-US")}</td>
         `;
         leaderboard.appendChild(row);
     });

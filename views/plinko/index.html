@@ -38,8 +38,8 @@
             </div>
             <div class="row">
               <button class="percent" onclick="amount.value = localBalance">1x</button>
-              <button class="percent" onclick="amount.value = localBalance*0.5">0.5x</button>
-              <button class="percent" onclick="amount.value = localBalance*0.25">0.25x</button>
+              <button class="percent" onclick="amount.value = Math.floor(localBalance*50)/100">0.5x</button>
+              <button class="percent" onclick="amount.value = Math.floor(localBalance*25)/100">0.25x</button>
             </div>
             <button id="spin" onclick="spin()">
                 Drop

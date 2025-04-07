@@ -20,8 +20,6 @@ function setup() {
   let canvas = createCanvas(width, height);
   canvas.parent("plinko");
   wheel = loadImage("./wheel.png");
-  spinButton = createButton("Play");
-  spinButton.mousePressed(spin);
 }
 
 function draw() {

@@ -54,7 +54,7 @@ function getBalance() {
       newBalance = data.balance;
       //console.log(newBalance);
       localBalance = newBalance;
-      balance.innerText = "$" + newBalance;
+      balance.innerText = "$" + newBalance.toLocaleString("en-US");
       localStorage.setItem("balance", newBalance);
     });
 }
