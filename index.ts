@@ -29,7 +29,7 @@ interface player {
 let playerData: player[] = []; 
 
 async function loadFromDB(){
-  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 100;);
+  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 100;");
   console.log("Loading data...")
   res.rows.map(
     (row, index) => {
@@ -201,7 +201,7 @@ app.post("/api/customdb", async (req, res) => {
       playerData = req.body.newdb;
 
       playerData.forEach((row) => {
-        DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6)", [
+        DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6);", [
           row.name,
           row.id,
           row.balance,
