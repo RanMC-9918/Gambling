@@ -37,8 +37,8 @@
   const confirmR = document.getElementById("confirmR")
   const confirmW = document.getElementById("confirmW")
   
-  submit.addEventListener("click", async () => {
-    let dataParsed = await newB.value.json();
+  submit.addEventListener("click", () => {
+    let dataParsed = JSON.parse(newB.value);
     console.log(dataParsed);
     if(confirmW.checked && !confirmR.checked){
       console.log("/api/customdb/?password=" + pass.value);
