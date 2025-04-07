@@ -29,7 +29,7 @@ interface player {
 let playerData: player[] = []; 
 
 async function loadFromDB(){
-  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 100");
+  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 100;);
   console.log("Loading data...")
   res.rows.map(
     (row, index) => {
@@ -188,17 +188,17 @@ app.post("/api/customdb", async (req, res) => {
   const password = req.query.password;
   if(password == process.env.PASSWORD){
     if(req.body.length > 1){
-      await DB.query("SELECT * FROM playerData").then((old) => old.text()).then((old) => {
-        res.end(old);
+      await DB.query("SELECT * FROM playerData;").then((old) => old.text()).then((old) => {
+        res.send(old);
       })
 
-      await DB.query("DROP TABLE playerData");
+      await DB.query("DROP TABLE playerData;");
 
       const initSql = fs.readSync(path.join(__dirname, "initial.sql"));
       
       await DB.query(initSql);
 
-      playerData = req.body;
+      playerData = req.body.newdb;
 
       playerData.forEach((row) => {
         DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6)", [
@@ -316,7 +316,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   console.log(multiplier);
 
-  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3", [player.balance, player.wheelOfFortunePlayed, player.id]);
+  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3;", [player.balance, player.wheelOfFortunePlayed, player.id]);
 
   res.send(JSON.stringify({ seed: seed }));
 });
