@@ -36,7 +36,7 @@ async function loadFromDB(){
       console.log("Index " + index + ": " + JSON.stringify(row));
       playerData.push({
         name: row.username,
-        balance: row.balance,
+        balance: Number(row.balance),
         id: row.id,
         plinkoPlayed: row.plinkoplayed,
         coinFlipPlayed: row.coinflipplayed,
@@ -62,7 +62,7 @@ app.post("/api/create", async (req, res) => {
   const name = req.body.name.toString();
 
   
-  const id = Math.floor(Math.random()*99999999)
+  const id = Math.floor(Math.random()*99999)
   
   DB.query("INSERT INTO playerData (username, id) VALUES ($1, $2);", [
     name, id
@@ -82,6 +82,13 @@ app.post("/api/create", async (req, res) => {
 
   res.send(JSON.stringify({ id: player.id, username: player.name }));
 });
+
+app.get("/api/info", (req, res) => {
+  const id = req.query.id;
+
+  let player = playerData.find((p) => id==p.id);
+  
+})
 
 app.get("/api/balance", (req, res) => {
   let id = req.query.id;
@@ -155,7 +162,7 @@ app.get("/plinko/drop", (req, res) => {
       multiplier = 10;
       break;
     case 4:
-      multiplier = 20;
+      multiplier = 50;
       break;
     default:
       multiplier = 1;
@@ -170,7 +177,7 @@ app.get("/plinko/drop", (req, res) => {
   
   DB.query(
     "UPDATE playerData SET balance = $1, plinkoPlayed = $2 WHERE id = $3",
-    [player.balance, player.plinkoPlayed, player.id]
+    [player.balance.toString(), player.plinkoPlayed, player.id]
   );
 
 
@@ -180,6 +187,7 @@ app.get("/plinko/drop", (req, res) => {
   res.send(
     JSON.stringify({
       seed: ans,
+      balance: player.balance,
     })
   );
 });
@@ -201,7 +209,7 @@ app.post("/api/customdb", async (req, res) => {
       playerData = req.body;
 
       playerData.forEach((row) => {
-        DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6)", [
+        DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, '$3', $4, $5, $6)", [
           row.name,
           row.id,
           row.balance,
@@ -316,7 +324,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   console.log(multiplier);
 
-  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3", [player.balance, player.wheelOfFortunePlayed, player.id]);
+  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3", [player.balance.toString(), player.wheelOfFortunePlayed, player.id]);
 
   res.send(JSON.stringify({ seed: seed }));
 });

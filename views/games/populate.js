@@ -27,7 +27,7 @@ fetch('/api/playerdata', function (req, res) {
         <td>${player.plinkoPlayed.toLocaleString("en-US")}</td>
         <td>${player.coinFlipPlayed.toLocaleString("en-US")}</td>
         <td>${player.wheelOfFortunePlayed.toLocaleString("en-US")}</td>
-        <td>${(Number)(player.balance).toLocaleString("en-US")}</td>
+        <td>${"$" + (Number)(player.balance).toLocaleString("en-US")}</td>
         `;
         leaderboard.appendChild(row);
     });

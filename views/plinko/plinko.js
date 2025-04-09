@@ -5,8 +5,6 @@ function setup() {
 
 let balls = [];
 
-let netBalanceBuffer = 0;
-
 function draw() {
   clear();
   noStroke();
@@ -36,12 +34,12 @@ function drawBoard() {
   fill(100, 25, 0);
   rect(0, height - 50, 45, 60);
   fill(255);
-  text("20x", 15, height - 20);
+  text("50x", 15, height - 20);
 
   fill(120, 20, 0);
   rect(45, height - 50, 45, 60);
   fill(255);
-  text("20x", 15, height - 20);
+  text("^2", 15, height - 20);
 
   fill(140, 15, 0);
   rect(90, height - 50, 45, 60);
@@ -78,7 +76,7 @@ function drawBoard() {
   fill(255);
   text("10x", 328, height - 20);
   fill(255);
-  text("20x", 375, height - 20);
+  text("50x", 375, height - 20);
 }
 
 async function trackPath(ball, path) {
@@ -110,16 +108,7 @@ async function trackPath(ball, path) {
     ball.y += 2;
     await sleep(10);
   }
-  netBalanceBuffer = (await balanceOnly()) - localBalance;
   console.log(netBalanceBuffer);
-  if (balls.length > 10) {
-    localBalance += netBalanceBuffer / balls.length;
-    localBalance = Math.floor(localBalance * 100) / 100;
-    balance.innerText = "$" + localBalance;
-    netBalanceBuffer -= netBalanceBuffer / balls.length;
-  } else {
-    getBalance();
-  }
 }
 
 function fall(x) {
@@ -152,23 +141,22 @@ function spin() {
     .then((data) => {
       console.log(data);
       if (data.seed == -1) {
-        alert("Not enough balance");
       } else {
-        localBalance -= amount.value;
-        localBalance = Math.floor(localBalance * 100) / 100;
-        balance.innerText = "$" + localBalance;
         balls.push({
           x: 400 / 2,
           y: -10,
         });
         seeds.push(data.seed);
         trackPath(balls[balls.length - 1], seeds[seeds.length - 1]);
+        localBalance-=amount.value;
+        localBalance=Math.floor(localBalance*100)/100
+        balance.innerText="$" + Math.max(localBalance, 0).toLocaleString("en-US");
       }
+       setTimeout(() => {
+        localBalance = data.balance;
+        localBalance = Math.floor(localBalance * 100) / 100;
+
+        balance.innerText = "$" + Number(data.balance).toLocaleString("en-US");
+      }, 2600)
     });
 }
-
-setInterval(() => {
-  if(balls.length < 4) {
-    getBalance();
-  }
-}, 5000);
