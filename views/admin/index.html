@@ -15,7 +15,8 @@
   <label for="new">
     Custom DB
   </label>
-  <input type="text" placeholder="Leave empty for read" id="new"><br>
+  <textarea rows="10" cols="40" placeholder="Leave empty for read" id="newB"></textarea>
+  <br>
   <br>
   <input type="checkbox" id="confirmR">
   <label for="confirmR">Confirm READ access</label>
@@ -31,22 +32,24 @@
 <script>
   const submit = document.getElementById("submit");
   const pass = document.getElementById("pass");
-  const newB = document.getElementById("new");
+  const newB = document.getElementById("newB");
   
   const confirmR = document.getElementById("confirmR")
   const confirmW = document.getElementById("confirmW")
   
   submit.addEventListener("click", () => {
+    let dataParsed = JSON.parse(newB.value);
+    console.log(dataParsed);
     if(confirmW.checked && !confirmR.checked){
       console.log("/api/customdb/?password=" + pass.value);
       fetch("/api/customdb/?password=" + pass.value, {
         method: "POST",
         headers: [],
         body: {
-          newdb: newB.value //finish
+          newdb: dataParsed //finish
         },
-      }).then((res) => res).then(() => {
-        window.redirect("/");
+      }).then((res) => res.text()).then((text) => {
+        document.body.innerHTML = text;
       })
     }
     else if(confirmR.checked && !confirmW.checked){
@@ -54,8 +57,8 @@
       fetch("/api/db/?password=" + pass.value, {
         method: "GET",
         headers: []
-      }).then((res) => res.text()).then((res) => {
-        document.body.innerHTML = res;
+      }).then((res) => res.text()).then((text) => {
+        document.body.innerHTML = text;
       })
     }
     else{
