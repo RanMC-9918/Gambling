@@ -24,6 +24,7 @@ interface player {
   plinkoPlayed: number;
   bridgeGamesPlayed: number;
   wheelOfFortunePlayed: number;
+  coinFlipsPlayed: number;
 }
 
 let playerData: player[] = []; 
