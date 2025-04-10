@@ -6,14 +6,31 @@ let userid = localStorage.getItem("userid");
 
 let username = localStorage.getItem("username");
 
+let digits = /[0-9]+/g;
+
 if (localBalance && userid && userid != "undefined" && userid != null) {
   balance.innerText = "$" + localBalance;
   getBalance();
 } else {
-  let name = prompt("Enter your name");
+  let name = prompt("Enter your name or id");
   if (!name) {
     alert("Name not given. Please refresh");
-  } else {
+  } 
+  else if (digits.test(name) && name.length <= 5){
+    fetch("/api/info/?id=" + name, {
+      method: "GET"
+    }).then((res) => res.json()).then((data) => {
+      if(!data){
+        alert("Not a valid id. If you want to enter a name, dont use numbers")
+        return;
+      }
+      userid = data.id;
+      localStorage.setItem("userid", data.id);
+      username = data.username;
+      localStorage.setitem("username", data.username);
+    });
+  }
+  else {
     fetch("/api/create", {
       method: "POST",
       headers: {
@@ -30,6 +47,7 @@ if (localBalance && userid && userid != "undefined" && userid != null) {
         username = data.username;
         localStorage.setItem("username", username);
         userid = data.id;
+        alert("Your id is " + userid + " you will need that if you want to change devices.")
       });
   }
 }

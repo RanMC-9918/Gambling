@@ -22,7 +22,7 @@ interface player {
   balance: number;
   id: number;
   plinkoPlayed: number;
-  coinFlipPlayed: number;
+  bridgeGamesPlayed: number;
   wheelOfFortunePlayed: number;
 }
 
@@ -39,7 +39,7 @@ async function loadFromDB(){
         balance: Number(row.balance),
         id: row.id,
         plinkoPlayed: row.plinkoplayed,
-        coinFlipPlayed: row.coinflipplayed,
+        bridgeGamesPlayed: row.bridgeGamesPlayed,
         wheelOfFortunePlayed: row.wheeloffortuneplayed,
       });
     }
@@ -73,7 +73,7 @@ app.post("/api/create", async (req, res) => {
     balance: 1000,
     id,
     plinkoPlayed: 0,
-    coinFlipPlayed: 0,
+    bridgeGamesPlayed: 0,
     wheelOfFortunePlayed: 0,
   };
 
@@ -87,6 +87,10 @@ app.get("/api/info", (req, res) => {
   const id = req.query.id;
 
   let player = playerData.find((p) => id==p.id);
+
+  if(player){
+    res.send({id: player.id, username: player.name});
+  }
   
 })
 
@@ -109,11 +113,22 @@ app.get("/api/playerdata", (req, res) => {
     name: player.name,
     balance: player.balance,
     plinkoPlayed: player.plinkoPlayed,
-    coinFlipPlayed: player.coinFlipPlayed,
-    wheelOfFortunePlayed: player.wheelOfFortunePlayed
-}});
+    bridgeGamesPlayed: player.bridgeGamesPlayed,
+    wheelOfFortunePlayed: player.wheelOfFortunePlayed,
+  };});
   res.send(JSON.stringify(playerData));
 });
+
+app.get("/api/playerdatafull", (req, res) => {
+  const password = req.query.password;
+
+  if(password == process.env.PASSWORD){
+    res.send({data: playerData});
+  }
+  else{
+    console.log("INVALID password attempt");
+  }
+})
 
 app.get("/plinko/drop", (req, res) => {
   const userid = req.query.id;

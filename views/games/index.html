@@ -14,6 +14,8 @@
     <header>
       <h1>Games</h1>
       <div class="balance">
+        <h1>ID:</h1>
+        <p id="id" onclick="if(this.innerText == 'reveal'){this.innerText=userid; this.style.color='red'}else{this.innerText='reveal'; this.style.color='white'}">reveal</p>
         <h1>Balance:</h1>
         <p id="balance">$0</p>
         <button onclick="reset()">Reset</button>
