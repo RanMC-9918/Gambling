@@ -22,7 +22,6 @@ interface player {
   balance: number;
   id: number;
   plinkoPlayed: number;
-  bridgeGamesPlayed: number;
   wheelOfFortunePlayed: number;
   coinFlipPlayed: number;
 }
@@ -40,8 +39,9 @@ async function loadFromDB(){
         balance: Number(row.balance),
         id: row.id,
         plinkoPlayed: row.plinkoplayed,
-        bridgeGamesPlayed: row.bridgeGamesPlayed,
-        wheelOfFortunePlayed: row.wheeloffortuneplayed,
+        coinFlipPlayed: row.coinFlipPlayed,
+        wheelOfFortunePlayed: row.wheelOfFortunePlayed,
+        
       });
     }
   )
@@ -74,7 +74,7 @@ app.post("/api/create", async (req, res) => {
     balance: 1000,
     id,
     plinkoPlayed: 0,
-    bridgeGamesPlayed: 0,
+    coinFlipPlayed: 0,
     wheelOfFortunePlayed: 0,
   };
 
@@ -114,7 +114,7 @@ app.get("/api/playerdata", (req, res) => {
     name: player.name,
     balance: player.balance,
     plinkoPlayed: player.plinkoPlayed,
-    bridgeGamesPlayed: player.bridgeGamesPlayed,
+    coinFlipPlayed: player.coinFlipPlayed,
     wheelOfFortunePlayed: player.wheelOfFortunePlayed,
   };});
   res.send(JSON.stringify(playerData));
