@@ -34,18 +34,19 @@ async function loadFromDB() {
     "SELECT * FROM playerData ORDER BY balance LIMIT 100;"
   );
   console.log("Loading data...");
-  res.rows.map((row, index) => {
+  res.rows.forEach((row, index) => {
     console.log("Index " + index + ": " + JSON.stringify(row));
     playerData.push({
       name: row.username,
       balance: Number(row.balance),
       id: row.id,
       plinkoPlayed: row.plinkoplayed,
-      coinFlipPlayed: row.coinFlipPlayed,
-      wheelOfFortunePlayed: row.wheelOfFortunePlayed,
-      bridgeGamesPlayed: row.bridgeGamesPlayed,
+      coinFlipPlayed: row.coinflipplayed,
+      wheelOfFortunePlayed: row.wheeloffortuneplayed,
+      bridgeGamesPlayed: row.bridgegamesplayed,
     });
   });
+  console.log("APP STARTED: https://localhost:3000")
 }
 
 loadFromDB();
