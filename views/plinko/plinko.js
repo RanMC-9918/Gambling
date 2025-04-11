@@ -108,7 +108,6 @@ async function trackPath(ball, path) {
     ball.y += 2;
     await sleep(10);
   }
-  console.log(netBalanceBuffer);
 }
 
 function fall(x) {

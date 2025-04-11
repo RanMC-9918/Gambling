@@ -9,7 +9,7 @@ const { Client } = require("pg");
 let DB = new Client({
   connectionString: process.env.DBURL,
   ssl: true,
-})
+});
 
 DB.connect();
 
@@ -24,27 +24,28 @@ interface player {
   plinkoPlayed: number;
   wheelOfFortunePlayed: number;
   coinFlipPlayed: number;
+  bridgeGamesPlayed?: number;
 }
 
-let playerData: player[] = []; 
+let playerData: player[] = [];
 
-async function loadFromDB(){
-  let res =  await DB.query("SELECT * FROM playerData ORDER BY balance LIMIT 100;");
-  console.log("Loading data...")
-  res.rows.map(
-    (row, index) => {
-      console.log("Index " + index + ": " + JSON.stringify(row));
-      playerData.push({
-        name: row.username,
-        balance: Number(row.balance),
-        id: row.id,
-        plinkoPlayed: row.plinkoplayed,
-        coinFlipPlayed: row.coinFlipPlayed,
-        wheelOfFortunePlayed: row.wheelOfFortunePlayed,
-        
-      });
-    }
-  )
+async function loadFromDB() {
+  let res = await DB.query(
+    "SELECT * FROM playerData ORDER BY balance LIMIT 100;"
+  );
+  console.log("Loading data...");
+  res.rows.map((row, index) => {
+    console.log("Index " + index + ": " + JSON.stringify(row));
+    playerData.push({
+      name: row.username,
+      balance: Number(row.balance),
+      id: row.id,
+      plinkoPlayed: row.plinkoplayed,
+      coinFlipPlayed: row.coinFlipPlayed,
+      wheelOfFortunePlayed: row.wheelOfFortunePlayed,
+      bridgeGamesPlayed: row.bridgeGamesPlayed,
+    });
+  });
 }
 
 loadFromDB();
@@ -62,11 +63,11 @@ app.get("/", (req, res) => {
 app.post("/api/create", async (req, res) => {
   const name = req.body.name.toString();
 
-  
-  const id = Math.floor(Math.random()*99999)
-  
+  const id = Math.floor(Math.random() * 99999);
+
   DB.query("INSERT INTO playerData (username, id) VALUES ($1, $2);", [
-    name, id
+    name,
+    id,
   ]);
 
   const player = {
@@ -80,20 +81,18 @@ app.post("/api/create", async (req, res) => {
 
   playerData.push(player);
 
-
   res.send(JSON.stringify({ id: player.id, username: player.name }));
 });
 
 app.get("/api/info", (req, res) => {
   const id = req.query.id;
 
-  let player = playerData.find((p) => id==p.id);
+  let player = playerData.find((p) => id == p.id);
 
-  if(player){
-    res.send({id: player.id, username: player.name});
+  if (player) {
+    res.send({ id: player.id, username: player.name, balance: player.balance });
   }
-  
-})
+});
 
 app.get("/api/balance", (req, res) => {
   let id = req.query.id;
@@ -110,26 +109,28 @@ app.get("/api/balance", (req, res) => {
 });
 
 app.get("/api/playerdata", (req, res) => {
-  let stripped = playerData.map(player => { return {
-    name: player.name,
-    balance: player.balance,
-    plinkoPlayed: player.plinkoPlayed,
-    coinFlipPlayed: player.coinFlipPlayed,
-    wheelOfFortunePlayed: player.wheelOfFortunePlayed,
-  };});
-  res.send(JSON.stringify(playerData));
+  let stripped = playerData.map((player: player) => {
+    return {
+      name: player.name,
+      balance: player.balance,
+      plinkoPlayed: player.plinkoPlayed,
+      coinFlipPlayed: player.coinFlipPlayed,
+      wheelOfFortunePlayed: player.wheelOfFortunePlayed,
+      bridgeGamesPlayed: player.bridgeGamesPlayed,
+    };
+  });
+  res.send(JSON.stringify(stripped));
 });
 
 app.get("/api/playerdatafull", (req, res) => {
   const password = req.query.password;
 
-  if(password == process.env.PASSWORD){
-    res.send({data: playerData});
-  }
-  else{
+  if (password == process.env.PASSWORD) {
+    res.send({ data: playerData });
+  } else {
     console.log("INVALID password attempt");
   }
-})
+});
 
 app.get("/plinko/drop", (req, res) => {
   const userid = req.query.id;
@@ -190,12 +191,11 @@ app.get("/plinko/drop", (req, res) => {
   amount *= multiplier;
   player.balance += amount;
   player.balance = Math.floor(player.balance * 100) / 100;
-  
+
   DB.query(
     "UPDATE playerData SET balance = $1, plinkoPlayed = $2 WHERE id = $3",
     [player.balance.toString(), player.plinkoPlayed, player.id]
   );
-
 
   //console.log(ans);
   //console.log(multiplier);
@@ -210,49 +210,50 @@ app.get("/plinko/drop", (req, res) => {
 
 app.post("/api/customdb", async (req, res) => {
   const password = req.query.password;
-  if(password == process.env.PASSWORD){
-    if(req.body.newdb.length > 1){
-      await DB.query("SELECT * FROM playerData;").then((old) => old.text()).then((old) => {
-        res.send(old);
-      })
+  if (password == process.env.PASSWORD) {
+    if (req.body.newdb.length > 1) {
+      await DB.query("SELECT * FROM playerData;")
+        .then((old) => old.text())
+        .then((old) => {
+          res.send(old);
+        });
 
       await DB.query("DROP TABLE playerData;");
 
       const initSql = fs.readSync(path.join(__dirname, "initial.sql"));
-      
+
       await DB.query(initSql);
 
       playerData = req.body.newdb;
 
       playerData.forEach((row) => {
-        DB.query("INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6);", [
-          row.name,
-          row.id,
-          row.balance,
-          row.plinkoPlayed,
-          row.coinFlipPlayed,
-          row.wheelOfFortunePlayed
-        ])
+        DB.query(
+          "INSERT INTO playerData (username, id, balance, plinkoplayed, coinflipplayed, wheeloffortuneplayed) VALUES ($1, $2, $3, $4, $5, $6);",
+          [
+            row.name,
+            row.id,
+            row.balance,
+            row.plinkoPlayed,
+            row.coinFlipPlayed,
+            row.wheelOfFortunePlayed,
+          ]
+        );
       });
+      console.log("APP READY: http://localhost:3000");
+    } else {
+      res.send("Bad data");
     }
-    else{
-      res.send("Bad data")
-    }
-    
+  } else {
+    res.send("Wrong password");
+    console.log("INVALID WRITE ATTEMPT WITH PASSWORD:" + password);
   }
-  else{
-      res.send("Wrong password");
-      console.log("INVALID WRITE ATTEMPT WITH PASSWORD:" + password);
-    }
-  }
-)
+});
 
 app.get("/api/db", (req, res) => {
   const pass = req.query.password;
-  if(pass == process.env.PASSWORD){
+  if (pass == process.env.PASSWORD) {
     res.send(JSON.stringify(playerData));
-  }
-  else{
+  } else {
     res.send("Wrong password");
     console.log("INVALID READ ATTEMPT WITH PASSWORD" + pass);
   }
@@ -299,7 +300,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   switch (option % 7) {
     case 0:
-      multiplier = 2;
+      multiplier = amount;
       break;
     case 1:
       multiplier = 0.7;
@@ -311,7 +312,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
       multiplier = 0.7;
       break;
     case 4:
-      multiplier = 2;
+      multiplier = amount;
       break;
     case 5:
       multiplier = 0.7;
@@ -321,9 +322,6 @@ app.get("/wheeloffortune/roll", (req, res) => {
       break;
     case 7:
       multiplier = 0.7;
-      break;
-    case 8:
-      multiplier = 2;
       break;
     default:
       multiplier = 1;
@@ -340,7 +338,10 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   console.log(multiplier);
 
-  DB.query("UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3;", [player.balance, player.wheelOfFortunePlayed, player.id]);
+  DB.query(
+    "UPDATE playerData SET balance = $1, wheelOfFortunePlayed = $2 WHERE id = $3;",
+    [player.balance, player.wheelOfFortunePlayed, player.id]
+  );
 
   res.send(JSON.stringify({ seed: seed }));
 });
@@ -374,7 +375,7 @@ app.get("/bridge/start", (req, res) => {
     level: 0,
   });
 
-  console.log(bridgeGames)
+  console.log(bridgeGames);
 });
 
 app.get("/bridge/cross", (req, res) => {
@@ -418,7 +419,6 @@ app.get("/bridge/end", (req, res) => {
 function generateWheelSeed() {
   return Math.floor(Math.random() * 10 + 15);
 }
-
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");

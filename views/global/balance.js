@@ -16,7 +16,7 @@ if (localBalance && userid && userid != "undefined" && userid != null) {
   if (!name) {
     alert("Name not given. Please refresh");
   } 
-  else if (digits.test(name) && name.length <= 5){
+  else if (digits.test(name) && name.length <= 10){
     fetch("/api/info/?id=" + name, {
       method: "GET"
     }).then((res) => res.json()).then((data) => {
@@ -27,7 +27,9 @@ if (localBalance && userid && userid != "undefined" && userid != null) {
       userid = data.id;
       localStorage.setItem("userid", data.id);
       username = data.username;
-      localStorage.setitem("username", data.username);
+      localStorage.setItem("username", data.username);
+      localBalance = BigInt(data.balance);
+      balance.innerText = "$" + data.balance.toLocaleString("en-US");
     });
   }
   else {
@@ -42,6 +44,7 @@ if (localBalance && userid && userid != "undefined" && userid != null) {
       .then((data) => {
         console.log(data);
         localStorage.setItem("balance", 1000);
+        localBalance = 1000
         balance.innerText = "$" + 1000;
         localStorage.setItem("userid", data.id);
         username = data.username;

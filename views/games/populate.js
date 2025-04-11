@@ -25,9 +25,16 @@ fetch('/api/playerdata', function (req, res) {
         <td>${index + 1}</td>
         <td>${player.name}</td>
         <td>${player.plinkoPlayed.toLocaleString("en-US")}</td>
-        <td>${player.coinFlipPlayed.toLocaleString("en-US")}</td>
-        <td>${player.wheelOfFortunePlayed.toLocaleString("en-US")}</td>
-        <td>${"$" + (Number)(player.balance).toLocaleString("en-US")}</td>
+        <td>${
+          player.coinFlipPlayed ? player.coinFlipPlayed.toLocaleString("en-US") : 0
+        }</td>
+        <td>${
+          player.wheelOfFortunePlayed ?
+          player.wheelOfFortunePlayed.toLocaleString("en-US") : 0
+        }</td>
+        <td>${
+          player.balance ? "$" + player.balance.toLocaleString("en-US") : brokey
+        }</td>
         `;
         leaderboard.appendChild(row);
     });

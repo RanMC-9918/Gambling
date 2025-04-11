@@ -41,7 +41,7 @@ function renderWheel(rot) {
 
 async function spin() {
   if(!idle) return
-  balance.innerText = "$" + (localBalance - amountInput.value); // balance.js
+  balance.innerText = "$" + (localBalance - amountInput.value).toLocaleString("en-US"); // balance.js
   requestSpin(amountInput.value)
 }
 
