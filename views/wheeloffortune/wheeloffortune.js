@@ -16,6 +16,8 @@ let amountInput = document.getElementById("amount");
 
 let idle = true;
 
+const values = ["^1.1", "x0", "x2", "x0", "x0.5", "x0", "x2", "x0"];
+
 function setup() {
   let canvas = createCanvas(width, height);
   canvas.parent("plinko");
@@ -27,16 +29,29 @@ function draw() {
   }
   clear();
   renderWheel(rot);
-  rotate(-rot);
-  fill(255);
+  rotate(-(rot * PI) / 180 + PI / 8);
   triangle(height / 2 - 30, 0, height / 2 + 10, -25, height / 2 + 10, +25);
 }
 
 function renderWheel(rot) {
-  angleMode(DEGREES);
-  translate(height / 2, height / 2);
-  rotate(rot);
-  image(wheel, -height / 2, -height / 2, height, height);
+  fill(200, 100, 20);
+  color(0);
+  textSize(30);
+  translate(200, 200);
+  rotate((rot * PI) / 180 - PI / 8);
+  for (let i = 0; i < values.length; i++) {
+    fill(200, 100, 20);
+    rotate(PI / 8);
+    beginShape();
+    vertex(0, 0);
+    vertex(200, 0);
+    vertex(200 * Math.cos(PI / 4), 200 * Math.sin(PI / 4));
+    vertex(0, 0);
+    endShape();
+    rotate(PI / 8);
+    fill(0);
+    text(values[i], 90, 10);
+  }
 }
 
 async function spin() {
@@ -64,40 +79,13 @@ function partTwo() {
       console.log("STOP");
       vel = 0;
       spinFinished(Math.ceil((rot % 360) / 45));
-      console.log(rot % 360)
+      console.log((rot % 360)/45)
       clearInterval(slowDown);
     }
   }, 30);
 }
 
 function spinFinished(option) {
-  let multiplier;
-  switch (option) {
-    case 0:
-      multiplier = 2;
-      break;
-    case 1:
-      multiplier = 0.7;
-      break;
-    case 2:
-      multiplier = 1;
-      break;
-    case 3:
-      multiplier = 0.7;
-      break;
-    case 4:
-      multiplier = 2;
-      break;
-    case 5:
-      multiplier = 0.7;
-      break;
-    case 6:
-      multiplier = 1;
-      break;
-    default:
-      multiplier = 0.7;
-      break;
-  }
 
   //console.log(multiplier);
   getBalance();

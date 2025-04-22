@@ -292,7 +292,7 @@ app.get("/wheeloffortune/roll", (req, res) => {
   }
 
   rot = rot % 360;
-  //console.log(rot);
+  console.log(rot/45);
   rot /= 45;
 
   const option = Math.ceil(rot);
@@ -301,28 +301,28 @@ app.get("/wheeloffortune/roll", (req, res) => {
 
   switch (option % 7) {
     case 0:
-      multiplier = amount;
+      multiplier = amount * 1.1;
       break;
     case 1:
-      multiplier = 0.7;
+      multiplier = 0;
       break;
     case 2:
-      multiplier = 1;
+      multiplier = 2;
       break;
     case 3:
-      multiplier = 0.7;
+      multiplier = 0;
       break;
     case 4:
-      multiplier = amount;
+      multiplier = 0.5;
       break;
     case 5:
-      multiplier = 0.7;
+      multiplier = 0;
       break;
     case 6:
-      multiplier = 1;
+      multiplier = 2;
       break;
     case 7:
-      multiplier = 0.7;
+      multiplier = 0;
       break;
     default:
       multiplier = 1;
